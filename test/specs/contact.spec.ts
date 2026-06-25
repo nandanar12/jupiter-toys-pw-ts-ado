@@ -1,6 +1,7 @@
 import { test, expect } from '../../business/fixtures/customFixture';
 import contactTestDataJson from '../data/uat/contact.data.json';
 import type { ContactTestData } from '../data/model/contact.model';
+import { contactRequiredFields } from '../data/model/contactRequiredFields.model';
 
 const contactTestData = contactTestDataJson as ContactTestData;
 
@@ -18,30 +19,26 @@ test.describe('Contact Form Tests', () => {
         });
 
         await test.step('Verify required field validation messages', async () => {
-            await expect(contactPage.getRequiredErrorText('forename'))
-                .resolves.toContain('Forename is required');
+            const requiredFields = contactRequiredFields;
 
-            await expect(contactPage.getRequiredErrorText('email'))
-                .resolves.toContain('Email is required');
-
-            await expect(contactPage.getRequiredErrorText('message'))
-                .resolves.toContain('Message is required');
+            for (const { field, message } of requiredFields) {
+                await expect(contactPage.getRequiredErrorText(field))
+                    .resolves.toContain(message);
+            }
         });
 
-        await contactActions.fillContactFormWithData(
-            contactTestData.validSubmission1
-        );
+        await test.step('Fill contact form with valid data', async () => {
+            await contactActions.fillContactFormWithData(
+                contactTestData.validSubmission1
+            );
+        });
 
         // Assert - Verify errors are gone and submission succeeds
         await test.step('Verify required field errors are cleared', async () => {
-            await expect(contactPage.getRequiredErrorText('forename'))
-                .resolves.not.toContain('Forename is required');
-
-            await expect(contactPage.getRequiredErrorText('email'))
-                .resolves.not.toContain('Email is required');
-
-            await expect(contactPage.getRequiredErrorText('message'))
-                .resolves.not.toContain('Message is required');
+            for (const { field, message } of contactRequiredFields) {
+                await expect(contactPage.getRequiredErrorText(field))
+                    .resolves.not.toContain(message);
+            }
         });
 
     });

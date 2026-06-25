@@ -10,32 +10,43 @@ test.describe('Shopping Cart Tests', () => {
     }, async ({ shoppingActions, cartPage }) => {
 
         const testProducts = shoppingTestData.testProducts;
-        await shoppingActions.buyProducts(testProducts);
-        await shoppingActions.navigateToCart();
+
+        await test.step('Buy selected products', async () => {
+            await shoppingActions.buyProducts(testProducts);
+        });
+
+        await test.step('Navigate to cart page', async () => {
+            await shoppingActions.navigateToCart();
+        });
 
         let calculatedTotal = 0;
 
         for (const product of testProducts) {
-            const details = await shoppingActions.getProductDetails(product.name);
-
             await test.step(
-                `Verify ${product.name}: price=${details.price}, quantity=${details.quantity}, subtotal=${details.subtotal}`,
+                `Verify ${product.name} pricing and subtotal`,
                 async () => {
-                    expect(details.price, `${product.name} ${details.price} to equal ${product.price}`)
-                        .toBe(product.price);
+                    const details = await shoppingActions.getProductDetails(product.name);
 
-                    expect(details.quantity, `${product.name} ${details.quantity} to equal ${product.quantity}`)
-                        .toBe(product.quantity);
+                    expect(
+                        details.price,
+                        `${product.name} ${details.price} to equal ${product.price}`
+                    ).toBe(product.price);
+
+                    expect(
+                        details.quantity,
+                        `${product.name} ${details.quantity} to equal ${product.quantity}`
+                    ).toBe(product.quantity);
 
                     const expectedSubtotal = details.price * details.quantity;
+
                     expect(
                         details.subtotal,
                         `Subtotal for ${product.name}: got ${details.subtotal}, expected ${expectedSubtotal}`
                     ).toBe(expectedSubtotal);
+
+                    calculatedTotal += details.subtotal;
                 }
             );
-
-            calculatedTotal += details.subtotal;
         }
 
         // Verify total = sum of subtotals
