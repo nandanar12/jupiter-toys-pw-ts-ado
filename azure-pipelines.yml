@@ -28,7 +28,7 @@ variables:
 
 jobs:
 - job: PlaywrightTests
-  displayName: "Run Tests on $(browser)"
+  displayName: "Run Tests on "
   strategy:
     matrix:
       chrome:
