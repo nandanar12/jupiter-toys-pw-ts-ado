@@ -72,6 +72,7 @@ jobs:
       inputs:
         testResultsFormat: 'JUnit'
         testResultsFiles: 'test-results/results.xml'
+        testRunTitle: 'Playwright $(browser) tests'
         failTaskOnFailedTests: true
       displayName: 'Publish JUnit test results'
 
@@ -79,12 +80,12 @@ jobs:
       condition: succeededOrFailed()
       inputs:
         pathToPublish: 'playwright-report'
-        artifactName: 'playwright-report'
+        artifactName: 'playwright-report-$(browser)'
       displayName: 'Publish Playwright HTML report'
 
     - task: PublishBuildArtifacts@1
       condition: succeededOrFailed()
       inputs:
         pathToPublish: 'test-results'
-        artifactName: 'test-results'
+        artifactName: 'test-results-$(browser)'
       displayName: 'Publish test results'

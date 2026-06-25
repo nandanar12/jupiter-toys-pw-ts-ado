@@ -1,6 +1,6 @@
 # Jupiter Toys Playwright TypeScript Framework
 
-End-to-end UI test automation using Playwright and TypeScript following the Page Object Model pattern.
+End-to-end UI test automation for Jupiter Toys using Playwright and TypeScript with Page Object Model, fixtures, typed JSON test data, and Azure DevOps pipeline support.
 
 ## Project Purpose
 
@@ -13,17 +13,11 @@ This framework is designed for:
 ## Installation
 
 1. **Prerequisites**
-   - Node.js 16+ installed (node -v)
-   - npm or yarn package manager (npm -v or npm.cmd -v)
+   - Node.js 18+ installed (`node -v`)
+   - npm package manager (`npm -v` or `npm.cmd -v`)
 
 2. **Install Dependencies**
-   
-   First time setup - generate lock file:
-   ```bash
-   npm install
-   ```
-   
-   This creates `package-lock.json`. For subsequent installations:
+
    ```bash
    npm ci
    ```
@@ -37,15 +31,12 @@ This framework is designed for:
 
 ### Environment Setup
 
-1. Copy the example environment file:
-   ```bash
-   cp core/environments/.env.example core/environments/.env
+1. Create or update `core/environments/syst.env` with your configuration:
+   ```
+   BASE_URL=http://jupiter.cloud.planittesting.com
    ```
 
-2. Update `core/environments/.env` with your configuration:
-   ```
-   BASE_URL=http://localhost:3000
-   ```
+`core/environments/syst.env` is ignored by Git. Azure DevOps sets `BASE_URL` in `azure-pipelines.yml`.
 
 ## Running Tests
 
@@ -72,7 +63,7 @@ npm run test:edge
 
 ### Run a Single Test
 ```bash
-npx playwright test test/specs/example.spec.ts
+npx playwright test "test/specs/contact.spec.ts" --project=Chrome
 ```
 
 ### List All Tests
@@ -85,27 +76,35 @@ npm run test:list
 npm run report
 ```
 
+HTML report file:
+```text
+playwright-report/index.html
+```
+
+JUnit report file:
+```text
+test-results/results.xml
+```
+
 ## Project Structure
 
-```
+```text
 .
-├── core/
-│   ├── environments/        # Environment configuration
-│   │   └── .env.example     # Example environment variables
-│   └── utils/               # Utility functions and helpers
-├── business/
-│   ├── actions/             # Business workflow logic
-│   ├── fixtures/            # Playwright fixtures and test setup
-│   ├── pages/               # Page Object Model classes
-│   │   └── base.page.ts     # Base page class
-├── test/
-│   ├── specs/               # Test specifications
-│   ├── data/
-│   │   ├── model/           # Data models and DTOs
-│   │   └── uat/             # UAT test data
-├── playwright.config.ts     # Playwright configuration
-├── tsconfig.json            # TypeScript configuration
-└── package.json             # Dependencies and scripts
+|-- business/
+|   |-- actions/             # Business workflow logic
+|   |-- fixtures/            # Playwright custom fixtures
+|   `-- pages/               # Page Object Model classes
+|-- core/
+|   `-- environments/        # Local environment files
+|-- test/
+|   |-- data/
+|   |   |-- model/           # TypeScript data models
+|   |   `-- uat/             # JSON test data
+|   `-- specs/               # Playwright test specs
+|-- azure-pipelines.yml
+|-- playwright.config.ts
+|-- tsconfig.json
+`-- package.json
 ```
 
 ## Architecture
@@ -121,8 +120,8 @@ npm run report
 - Keep actions focused on specific business processes
 
 ### Test Data
-- Data models/DTOs in `test/data/model/`
-- UAT test data in `test/data/uat/`
+- Data models in `test/data/model/`
+- JSON UAT test data in `test/data/uat/`
 - Separate test data from test logic
 
 ### Test Specifications
@@ -133,31 +132,32 @@ npm run report
 
 ## Azure DevOps Integration
 
-### Push to Azure DevOps
+### Git Remotes
 
-1. Add ADO remote:
-   ```bash
-   git remote add ado <azure-devops-repo-url>
-   ```
+Current remote names:
 
-2. Push to ADO main:
-   ```bash
-   git push ado main
-   ```
+```text
+ado
+github
+```
 
-3. Also push to GitHub origin:
-   ```bash
-   git push origin main
-   ```
+Push to both:
+
+```bash
+git push ado main
+git push github main
+```
 
 ### Azure Pipeline
 
 The pipeline (defined in `azure-pipelines.yml`) will:
 - Run tests on Ubuntu latest
-- Execute tests in Chrome and Edge browsers
+- Run a matrix across Chrome and Edge projects
+- Support `smoke`, `regression`, and `all` test type parameters
+- Run TypeScript validation before tests
 - Generate HTML and JUnit reports
 - Publish test results and reports
-- Run on triggers to the `main` branch
+- Run on triggers to the `main` branch and on the nightly schedule
 
 ## Development
 
@@ -166,14 +166,11 @@ The pipeline (defined in `azure-pipelines.yml`) will:
 npx tsc --noEmit
 ```
 
-### ESLint (optional, not included by default)
-Configure and add ESLint as needed for your team standards.
-
 ## Best Practices
 
 1. **Keep specs thin** - Use actions for business workflows
 2. **Use fixtures** - Inject page objects and actions through fixtures
-3. **Separate concerns** - Config, utils, and test data are independent
+3. **Separate concerns** - Config, page objects, actions, and test data are independent
 4. **Meaningful tags** - Use tags like `@smoke`, `@regression`, `@ui`, `@api`
 5. **Avoid magic numbers** - Use Playwright's auto-waits instead
 6. **Page objects only** - No assertions in page object methods
@@ -182,8 +179,8 @@ Configure and add ESLint as needed for your team standards.
 ## Troubleshooting
 
 ### Tests fail with BASE_URL not found
-- Ensure `.env` file exists in `core/environments/`
-- Check that `BASE_URL` is properly configured
+- Ensure `core/environments/syst.env` exists locally
+- Check that `BASE_URL` is configured locally or in `azure-pipelines.yml`
 
 ### Browser installation fails
 ```bash
