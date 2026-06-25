@@ -5,49 +5,68 @@ import type { ContactTestData } from '../data/model/contact.model';
 const contactTestData = contactTestDataJson as ContactTestData;
 
 test.describe('Contact Form Tests', () => {
-  test('TC-001: Contact form validation - empty form submission and error resolution', {
-    tag: ['@smoke', '@regression', '@contact'],
-  }, async ({ contactActions, contactPage }) => {
-    
-    await contactActions.navigateToContactPage();
-    await contactActions.submitEmptyContactForm();
+    test('TC-001: Contact form validation - empty form submission and error resolution', {
+        tag: ['@smoke', '@regression', '@contact'],
+    }, async ({ contactActions, contactPage }) => {
 
-    // Assert - Verify required field errors are displayed by text
-    expect(await contactPage.getRequiredErrorText('forename')).toContain('Forename is required');
-    expect(await contactPage.getRequiredErrorText('email')).toContain('Email is required');
-    expect(await contactPage.getRequiredErrorText('message')).toContain('Message is required');
+        await test.step('Navigate to Contact page', async () => {
+            await contactActions.navigateToContactPage();
+        });
 
-    await contactActions.fillContactFormWithData(
-      contactTestData.validSubmission1
-    );
+        await test.step('Submit empty contact form', async () => {
+            await contactActions.submitEmptyContactForm();
+        });
 
-    // Assert - Verify errors are gone and submission succeeds
-    expect(await contactPage.getRequiredErrorText('forename')).not.toContain('Forename is required');
-    expect(await contactPage.getRequiredErrorText('email')).not.toContain('Email is required');
-    expect(await contactPage.getRequiredErrorText('message')).not.toContain('Message is required');
-  });
+        await test.step('Verify required field validation messages', async () => {
+            await expect(contactPage.getRequiredErrorText('forename'))
+                .resolves.toContain('Forename is required');
 
-  test('TC-002: Contact form successful submission performs 5 repeated runs', {
-    tag: ['@regression', '@contact'],
-  }, async ({ contactActions, contactPage }) => {
-    const validSubmissions = [
-      contactTestData.validSubmission1,
-      contactTestData.validSubmission2,
-      contactTestData.validSubmission3,
-      contactTestData.validSubmission4,
-      contactTestData.validSubmission5,
-    ];
+            await expect(contactPage.getRequiredErrorText('email'))
+                .resolves.toContain('Email is required');
 
-    for (const submission of validSubmissions) {
-      await contactActions.navigateToContactPage();
-      await contactActions.submitContactFormWithData(submission);
+            await expect(contactPage.getRequiredErrorText('message'))
+                .resolves.toContain('Message is required');
+        });
 
-      await expect(contactPage.successMessage).toHaveText(
-        `Thanks ${submission.forename}, we appreciate your feedback.`
-      );
-      
-      // Click back button to return to contact form
-      await contactPage.clickBack();
-    }
-  });
+        await contactActions.fillContactFormWithData(
+            contactTestData.validSubmission1
+        );
+
+        // Assert - Verify errors are gone and submission succeeds
+        await test.step('Verify required field errors are cleared', async () => {
+            await expect(contactPage.getRequiredErrorText('forename'))
+                .resolves.not.toContain('Forename is required');
+
+            await expect(contactPage.getRequiredErrorText('email'))
+                .resolves.not.toContain('Email is required');
+
+            await expect(contactPage.getRequiredErrorText('message'))
+                .resolves.not.toContain('Message is required');
+        });
+
+    });
+
+    test('TC-002: Contact form successful submission performs 5 repeated runs', {
+        tag: ['@regression', '@contact'],
+    }, async ({ contactActions, contactPage }) => {
+        const validSubmissions = [
+            contactTestData.validSubmission1,
+            contactTestData.validSubmission2,
+            contactTestData.validSubmission3,
+            contactTestData.validSubmission4,
+            contactTestData.validSubmission5,
+        ];
+
+        for (const submission of validSubmissions) {
+            await contactActions.navigateToContactPage();
+            await contactActions.submitContactFormWithData(submission);
+
+            await expect(contactPage.successMessage).toHaveText(
+                `Thanks ${submission.forename}, we appreciate your feedback.`
+            );
+
+            // Click back button to return to contact form
+            await contactPage.clickBack();
+        }
+    });
 });
