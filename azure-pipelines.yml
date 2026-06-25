@@ -32,11 +32,9 @@ jobs:
   strategy:
     matrix:
       chrome:
-        browser: chromium
+        browser: Chrome
       edge:
-        browser: msedge
-      webkit:
-        browser: webkit
+        browser: Edge
 
   steps:
     - task: NodeTool@0
@@ -59,11 +57,11 @@ jobs:
     # Run tests based on dropdown selection
     - script: |
         if [ "${{ parameters.testType }}" = "smoke" ]; then
-          npx playwright test --grep @smoke --project=${{ matrix.browser }}
+          npx playwright test --grep @smoke --project=$(browser)
         elif [ "${{ parameters.testType }}" = "regression" ]; then
-          npx playwright test --grep @regression --project=${{ matrix.browser }}
+          npx playwright test --grep @regression --project=$(browser)
         else
-          npx playwright test --project=${{ matrix.browser }}
+          npx playwright test --project=$(browser)
         fi
       displayName: "Run Playwright tests"
       env:
