@@ -1,0 +1,27 @@
+{
+  "validSubmission1": {
+    "forename": "John Doe",
+    "email": "john.doe@example.com",
+    "message": "This is a test message for contact form"
+  },
+  "validSubmission2": {
+    "forename": "Jane Smith",
+    "email": "jane.smith@example.com",
+    "message": "Another test submission to the contact form"
+  },
+  "validSubmission3": {
+    "forename": "Bob Johnson",
+    "email": "bob.johnson@example.com",
+    "message": "Third test submission for validation"
+  },
+  "validSubmission4": {
+    "forename": "Alice Williams",
+    "email": "alice.williams@example.com",
+    "message": "Fourth test submission to ensure reliability"
+  },
+  "validSubmission5": {
+    "forename": "Charlie Brown",
+    "email": "charlie.brown@example.com",
+    "message": "Fifth test submission for final validation run"
+  }
+}

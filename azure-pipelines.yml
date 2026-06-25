@@ -1,0 +1,53 @@
+trigger:
+  - main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  BASE_URL: 'http://jupiter.cloud.planittesting.com'
+
+steps:
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '18.x'
+    displayName: 'Install Node.js'
+
+  - script: node -v
+    displayName: 'Check Node version'
+
+  - script: npm ci
+    displayName: 'Install dependencies'
+
+  - script: npx tsc --noEmit
+    displayName: 'Validate TypeScript'
+
+  - script: npx playwright install --with-deps chrome msedge
+    displayName: 'Install Playwright browsers'
+
+  - script: npx playwright test
+    displayName: 'Run Playwright tests'
+    env:
+      BASE_URL: $(BASE_URL)
+
+  - task: PublishTestResults@2
+    condition: succeededOrFailed()
+    inputs:
+      testResultsFormat: 'JUnit'
+      testResultsFiles: 'test-results/results.xml'
+      failTaskOnFailedTests: true
+    displayName: 'Publish JUnit test results'
+
+  - task: PublishBuildArtifacts@1
+    condition: succeededOrFailed()
+    inputs:
+      pathToPublish: 'playwright-report'
+      artifactName: 'playwright-report'
+    displayName: 'Publish Playwright HTML report'
+
+  - task: PublishBuildArtifacts@1
+    condition: succeededOrFailed()
+    inputs:
+      pathToPublish: 'test-results'
+      artifactName: 'test-results'
+    displayName: 'Publish test results'
