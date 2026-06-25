@@ -1,11 +1,39 @@
 trigger:
   - main
 
+# Nightly regression schedule (runs at 2 AM NZ time)
+schedules:
+- cron: "0 14 * * *"   # 14:00 UTC = 02:00 NZST
+  displayName: Nightly Regression
+  branches:
+    include:
+      - main
+  always: true
+
+parameters:
+- name: testType
+  displayName: Select test type
+  type: string
+  default: smoke
+  values:
+    - smoke
+    - regression
+    - all
+
 pool:
   vmImage: 'ubuntu-latest'
 
 variables:
   BASE_URL: 'http://jupiter.cloud.planittesting.com'
+
+strategy:
+  matrix:
+    chrome:
+      browser: chromium
+    edge:
+      browser: msedge
+    webkit:
+      browser: webkit
 
 steps:
   - task: NodeTool@0
@@ -22,11 +50,19 @@ steps:
   - script: npx tsc --noEmit
     displayName: 'Validate TypeScript'
 
-  - script: npx playwright install --with-deps chrome msedge
+  - script: npx playwright install --with-deps
     displayName: 'Install Playwright browsers'
 
-  - script: npx playwright test
-    displayName: 'Run Playwright tests'
+  # Run tests based on dropdown selection
+  - script: |
+      if [ "${{ parameters.testType }}" = "smoke" ]; then
+        npx playwright test --grep @smoke --project=${{ matrix.browser }}
+      elif [ "${{ parameters.testType }}" = "regression" ]; then
+        npx playwright test --grep @regression --project=${{ matrix.browser }}
+      else
+        npx playwright test --project=${{ matrix.browser }}
+      fi
+    displayName: "Run Playwright tests"
     env:
       BASE_URL: $(BASE_URL)
 
