@@ -31,12 +31,12 @@ This framework is designed for:
 
 ### Environment Setup
 
-1. Create or update `core/environments/syst.env` with your configuration:
+1. Create or update `core/environments/uat.env` with your configuration:
    ```
    BASE_URL=http://jupiter.cloud.planittesting.com
    ```
 
-`core/environments/syst.env` is ignored by Git. Azure DevOps sets `BASE_URL` in `azure-pipelines.yml`.
+`core/environments/uat.env` is ignored by Git. Azure DevOps sets `BASE_URL` in `azure-pipelines.yml`.
 
 ## Running Tests
 
@@ -179,7 +179,7 @@ npx tsc --noEmit
 ## Troubleshooting
 
 ### Tests fail with BASE_URL not found
-- Ensure `core/environments/syst.env` exists locally
+- Ensure `core/environments/uat.env` exists locally
 - Check that `BASE_URL` is configured locally or in `azure-pipelines.yml`
 
 ### Browser installation fails

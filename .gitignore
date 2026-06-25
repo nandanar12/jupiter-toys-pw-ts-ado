@@ -10,7 +10,7 @@ test-results/
 screenshots/
 
 # Environment
-core/environments/syst.env
+core/environments/uat.env
 
 # IDE
 .vscode/

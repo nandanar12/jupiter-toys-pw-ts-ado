@@ -2,7 +2,7 @@ import { defineConfig, devices } from '@playwright/test';
 import * as dotenv from 'dotenv';
 import * as path from 'path';
 
-dotenv.config({ path: path.resolve(__dirname, 'core/environments/syst.env') });
+dotenv.config({ path: path.resolve(__dirname, 'core/environments/uat.env') });
 
 export default defineConfig({
   testDir: './test',
