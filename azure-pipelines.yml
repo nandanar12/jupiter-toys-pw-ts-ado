@@ -14,10 +14,12 @@ parameters:
 - name: testType
   displayName: Select test type
   type: string
-  default: smoke
+  default: regression
   values:
     - smoke
     - regression
+    - shopping
+    - contact
     - all
 
 pool:

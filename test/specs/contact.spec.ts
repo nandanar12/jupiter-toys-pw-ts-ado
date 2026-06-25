@@ -1,4 +1,4 @@
-import { test, expect } from '../../business/fixtures/pageObjectFixture';
+import { test, expect } from '../../business/fixtures/customFixture';
 import contactTestDataJson from '../data/uat/contact.data.json';
 import type { ContactTestData } from '../data/model/contact.model';
 
@@ -58,15 +58,16 @@ test.describe('Contact Form Tests', () => {
         ];
 
         for (const submission of validSubmissions) {
-            await contactActions.navigateToContactPage();
-            await contactActions.submitContactFormWithData(submission);
+            await test.step(`Submit contact form for ${submission.forename}`, async () => {
+                await contactActions.navigateToContactPage();
+                await contactActions.submitContactFormWithData(submission);
 
-            await expect(contactPage.successMessage).toHaveText(
-                `Thanks ${submission.forename}, we appreciate your feedback.`
-            );
+                await expect(contactPage.successMessage).toHaveText(
+                    `Thanks ${submission.forename}, we appreciate your feedback.`
+                );
 
-            // Click back button to return to contact form
-            await contactPage.clickBack();
+                await contactPage.clickBack();
+            });
         }
     });
 });

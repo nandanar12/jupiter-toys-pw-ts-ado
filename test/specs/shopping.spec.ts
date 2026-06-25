@@ -1,4 +1,4 @@
-import { test, expect } from '../../business/fixtures/pageObjectFixture';
+import { test, expect } from '../../business/fixtures/customFixture';
 import shoppingTestDataJson from '../data/uat/shopping.data.json';
 import type { ShoppingTestData } from '../data/model/shopping.model';
 
@@ -35,7 +35,6 @@ test.describe('Shopping Cart Tests', () => {
                 }
             );
 
-            // Add to running total
             calculatedTotal += details.subtotal;
         }
 
