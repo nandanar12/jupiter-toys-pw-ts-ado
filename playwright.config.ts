@@ -4,6 +4,8 @@ import * as path from 'path';
 
 dotenv.config({ path: path.resolve(__dirname, 'core/environments/uat.env') });
 
+const isCI = !!process.env.CI || !!process.env.TF_BUILD;
+
 export default defineConfig({
   testDir: './test',
   timeout: 100000,
@@ -11,9 +13,9 @@ export default defineConfig({
     timeout: 30000,
   },
   fullyParallel: true,
-  forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 3 : 1,
+  forbidOnly: isCI,
+  retries: isCI ? 2 : 0,
+  workers: isCI ? 3 : undefined,
   reporter: [
     ['html'],
     ['list'],
