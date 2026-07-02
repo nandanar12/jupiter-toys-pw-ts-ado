@@ -1,11 +1,6 @@
 import { HomePage } from '../pages/home.page';
 import { ContactPage } from '../pages/contact.page';
-
-export type ContactFormData = {
-  forename: string;
-  email: string;
-  message: string;
-};
+import type { ContactFormData } from '../../test/data/model/contact.model';
 
 export class ContactActions {
   private readonly homePage: HomePage;
@@ -19,7 +14,7 @@ export class ContactActions {
   async navigateToContactPage(): Promise<void> {
     await this.homePage.gotoHome();
     await this.homePage.navigateToContact();
-    await this.contactPage.page.waitForLoadState('networkidle');
+    await this.contactPage.forenameInput.waitFor({ state: 'visible' });
   }
 
   async fillContactFormWithData(data: ContactFormData): Promise<void> {
