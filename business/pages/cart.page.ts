@@ -17,7 +17,7 @@ export class CartPage extends BasePage {
 
     async getProductPrice(productName: string): Promise<string> {
         const row = this.getProductRow(productName);
-        const priceCell = row.locator('td:nth-child(2)');
+        const priceCell = row.getByRole('cell').nth(1);
         return await priceCell.textContent() || '';
     }
 
@@ -28,7 +28,7 @@ export class CartPage extends BasePage {
 
     async getProductSubtotal(productName: string): Promise<string> {
         const row = this.getProductRow(productName);
-        const subtotalCell = row.locator('td:nth-child(4)');
+        const subtotalCell = row.getByRole('cell').nth(3);
         return await subtotalCell.textContent() || '';
     }
 

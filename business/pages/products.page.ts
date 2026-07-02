@@ -7,7 +7,7 @@ export class ProductsPage extends BasePage {
 
     constructor(page: Page) {
         super(page);
-        this.productItems = page.locator('li');
+        this.productItems = page.getByRole('listitem');
         this.cartLink = page.getByRole('link', { name: /cart/i });
     }
 

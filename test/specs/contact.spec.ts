@@ -59,9 +59,7 @@ test.describe('Contact Form Tests', () => {
                 await contactActions.navigateToContactPage();
                 await contactActions.submitContactFormWithData(submission);
 
-                await expect(contactPage.successMessage).toHaveText(
-                    `Thanks ${submission.forename}, we appreciate your feedback.`
-                );
+                await expect(contactPage.getSuccessMessage(submission.forename)).toBeVisible();
 
                 await contactPage.clickBack();
             });

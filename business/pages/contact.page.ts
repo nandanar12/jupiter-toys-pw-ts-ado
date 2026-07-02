@@ -6,7 +6,6 @@ export class ContactPage extends BasePage {
   readonly emailInput: Locator;
   readonly messageTextarea: Locator;
   readonly submitButton: Locator;
-  readonly successMessage: Locator;
   readonly forenameError: Locator;
   readonly emailError: Locator;
   readonly messageError: Locator;
@@ -18,7 +17,6 @@ export class ContactPage extends BasePage {
     this.emailInput = page.getByRole('textbox', { name: /email/i });
     this.messageTextarea = page.getByRole('textbox', { name: /message/i });
     this.submitButton = page.getByRole('link', { name: /submit/i });
-    this.successMessage = page.locator('.alert-success');
     this.forenameError = page.getByText('Forename is required');
     this.emailError = page.getByText('Email is required');
     this.messageError = page.getByText('Message is required');
@@ -39,6 +37,10 @@ export class ContactPage extends BasePage {
 
   async clickSubmit(): Promise<void> {
     await this.submitButton.click();
+  }
+
+  getSuccessMessage(forename: string): Locator {
+    return this.page.getByText(`Thanks ${forename}, we appreciate your feedback.`);
   }
 
   private getRequiredErrorLocator(field: 'forename' | 'email' | 'message'): Locator {
