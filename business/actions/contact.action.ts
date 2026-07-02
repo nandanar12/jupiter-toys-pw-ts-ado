@@ -32,7 +32,7 @@ export class ContactActions {
     await this.contactPage.clickSubmit();
   }
 
-  async submitContactFormWithData(data: ContactFormData): Promise<void> {
+  async submitContactFormWithMandatoryData(data: ContactFormData): Promise<void> {
     await this.fillContactFormWithData(data);
     await this.submitContactForm();
   }

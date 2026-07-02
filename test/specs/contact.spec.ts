@@ -57,7 +57,7 @@ test.describe('Contact Form Tests', () => {
         for (const submission of validSubmissions) {
             await test.step(`Submit contact form for ${submission.forename}`, async () => {
                 await contactActions.navigateToContactPage();
-                await contactActions.submitContactFormWithData(submission);
+                await contactActions.submitContactFormWithMandatoryData(submission);
 
                 await expect(contactPage.getSuccessMessage(submission.forename)).toBeVisible();
 
