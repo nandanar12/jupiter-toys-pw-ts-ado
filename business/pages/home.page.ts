@@ -9,11 +9,11 @@ export class HomePage extends BasePage {
     this.contactLink = page.getByRole('link', { name: /Contact/i });
   }
 
-  async gotoHome(): Promise<void> {
+  async gotoHome(){
     await this.goto('/');
   }
 
-  async navigateToContact(): Promise<void> {
+  async navigateToContact(){
     await this.contactLink.click();
   }
 }

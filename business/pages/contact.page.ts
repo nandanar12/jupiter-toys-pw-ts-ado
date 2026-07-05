@@ -23,23 +23,23 @@ export class ContactPage extends BasePage {
     this.backButton = page.getByRole('link', { name: /back/i });
   }
 
-  async fillForename(forename: string): Promise<void> {
+  async fillForename(forename: string) {
     await this.forenameInput.fill(forename);
   }
 
-  async fillEmail(email: string): Promise<void> {
+  async fillEmail(email: string) {
     await this.emailInput.fill(email);
   }
 
-  async fillMessage(message: string): Promise<void> {
+  async fillMessage(message: string) {
     await this.messageTextarea.fill(message);
   }
 
-  async clickSubmit(): Promise<void> {
+  async clickSubmit() {
     await this.submitButton.click();
   }
 
-  getSuccessMessage(forename: string): Locator {
+  getSuccessMessage(forename: string) {
     return this.page.getByText(`Thanks ${forename}, we appreciate your feedback.`);
   }
 
@@ -63,7 +63,7 @@ export class ContactPage extends BasePage {
     return await errorLocator.textContent() || '';
   }
 
-  async clickBack(): Promise<void> {
+  async clickBack() {
     await this.backButton.click();
   }
 }

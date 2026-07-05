@@ -1,4 +1,4 @@
-export type ProductSelection = {
+export interface ProductSelection {
   name: string;
   quantity: number;
 };

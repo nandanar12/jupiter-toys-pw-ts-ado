@@ -1,10 +1,10 @@
-export type ContactFormData = {
+export interface ContactFormData {
   forename: string;
   email: string;
   message: string;
 };
 
-export type ContactTestData = {
+export interface ContactTestData {
   validSubmission1: ContactFormData;
   validSubmission2: ContactFormData;
   validSubmission3: ContactFormData;

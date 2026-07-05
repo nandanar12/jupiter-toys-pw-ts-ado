@@ -11,17 +11,17 @@ export class ProductsPage extends BasePage {
         this.cartLink = page.getByRole('link', { name: /cart/i });
     }
 
-    async gotoShop(): Promise<void> {
+    async gotoShop(){
         await this.goto('#/shop');
     }
 
-    getBuyButton(productName: string): Locator {
+    getBuyButton(productName: string){
         return this.productItems
             .filter({ has: this.page.getByRole('heading', { name: productName }) })
             .getByRole('link', { name: /buy/i });
     }
 
-    async addProductToCart(productName: string, quantity: number): Promise<void> {
+    async addProductToCart(productName: string, quantity: number) {
         const buyButton = this.getBuyButton(productName);
 
         for (let i = 0; i < quantity; i++) {
@@ -29,7 +29,7 @@ export class ProductsPage extends BasePage {
         }
     }
 
-    async goToCart(): Promise<void> {
+    async goToCart() {
         await this.cartLink.click();
     }
 }

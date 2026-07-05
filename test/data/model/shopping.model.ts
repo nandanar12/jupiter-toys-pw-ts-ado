@@ -1,9 +1,9 @@
-export type ShoppingProduct = {
+export interface ShoppingProduct {
   name: string;
   quantity: number;
   price: number;
 };
 
-export type ShoppingTestData = {
+export interface ShoppingTestData {
   testProducts: ShoppingProduct[];
 };

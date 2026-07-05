@@ -11,7 +11,7 @@ export class ShoppingActions {
         this.cartPage = cartPage;
     }
 
-    async buyProducts(products: ProductSelection[]): Promise<void> {
+    async buyProducts(products: ProductSelection[]){
         await this.productsPage.gotoShop();
 
         for (const product of products) {
@@ -19,15 +19,11 @@ export class ShoppingActions {
         }
     }
 
-    async navigateToCart(): Promise<void> {
+    async navigateToCart(){
         await this.productsPage.goToCart();
     }
 
-    async getProductDetails(productName: string): Promise<{
-        price: number;
-        quantity: number;
-        subtotal: number;
-    }> {
+    async getProductDetails(productName: string) {
         const priceStr = await this.cartPage.getProductPrice(productName);
         const quantityStr = await this.cartPage.getProductQuantity(productName);
         const subtotalStr = await this.cartPage.getProductSubtotal(productName);
