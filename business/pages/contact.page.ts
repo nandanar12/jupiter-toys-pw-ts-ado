@@ -13,9 +13,9 @@ export class ContactPage extends BasePage {
 
   constructor(page: Page) {
     super(page);
-    this.forenameInput = page.getByRole('textbox', { name: /forename/i });
-    this.emailInput = page.getByRole('textbox', { name: /email/i });
-    this.messageTextarea = page.getByRole('textbox', { name: /message/i });
+    this.forenameInput = page.getByLabel('Forename');
+    this.emailInput = page.getByLabel('Email');
+    this.messageTextarea = page.getByLabel('Message');
     this.submitButton = page.getByRole('link', { name: /submit/i });
     this.forenameError = page.getByText('Forename is required');
     this.emailError = page.getByText('Email is required');
