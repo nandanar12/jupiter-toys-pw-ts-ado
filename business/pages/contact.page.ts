@@ -43,13 +43,12 @@ export class ContactPage extends BasePage {
     return this.page.getByText(`Thanks ${forename}, we appreciate your feedback.`);
   }
 
-  private getRequiredErrorLocator(field: 'forename' | 'email' | 'message'): Locator {
-    switch (field) {
-      case 'forename':
+    private getRequiredErrorLocator(field: 'forename' | 'email' | 'message'): Locator {
+    if (field === 'forename') {
         return this.forenameError;
-      case 'email':
+    } else if (field === 'email') {
         return this.emailError;
-      case 'message':
+    } else {
         return this.messageError;
     }
   }
