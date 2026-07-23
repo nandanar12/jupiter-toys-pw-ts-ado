@@ -32,10 +32,22 @@ jobs:
     displayName: "Run Tests on "
     strategy:
       matrix:
-        chrome:
+        chrome_contact:
           browser: Chrome
-        edge:
+          specName: contact
+          specPath: tests/contact.spec.ts
+        chrome_shopping:
+          browser: Chrome
+          specName: shopping
+          specPath: tests/shopping.spec.ts  
+        edge_contact:
           browser: Edge
+          specName: contact
+          specPath: tests/contact.spec.ts
+        edge_shopping:
+          browser: Edge
+          specName: shopping
+          specPath: tests/shopping.spec.ts
 
     steps:
       - task: NodeTool@0

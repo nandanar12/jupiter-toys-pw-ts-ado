@@ -31,25 +31,20 @@ export class ContactPage extends BasePage {
     await this.emailInput.fill(email);
   }
 
-  async fillMessage(message: string) {
-    await this.messageTextarea.fill(message);
-  }
+  fillMessage = async (message: string) => await this.messageTextarea.fill(message);
 
-  async clickSubmit() {
-    await this.submitButton.click();
-  }
+  clickSubmit = async () => await this.submitButton.click();
 
-  getSuccessMessage(forename: string) {
-    return this.page.getByText(`Thanks ${forename}, we appreciate your feedback.`);
-  }
+  getSuccessMessage = (forename: string) => this.page.getByText(`Thanks ${forename}, we appreciate your feedback.`);
 
-    private getRequiredErrorLocator(field: 'forename' | 'email' | 'message'): Locator {
+
+  private getRequiredErrorLocator(field: 'forename' | 'email' | 'message'): Locator {
     if (field === 'forename') {
-        return this.forenameError;
+      return this.forenameError;
     } else if (field === 'email') {
-        return this.emailError;
+      return this.emailError;
     } else {
-        return this.messageError;
+      return this.messageError;
     }
   }
 
